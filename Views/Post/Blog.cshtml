@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Local_Theatre.Models.Post>
+
+@{
+    ViewBag.Title = "Blog";
+}
+
+<div class="blog-main">
+
+    @if (TempData["AlertMessage"] != null)
+    {
+        <br />
+        <div class="alert alert-success">
+            <strong>@TempData["AlertMessage"]</strong>
+        </div>
+        <br />
+    }
+
+    @if (User.IsInRole("Suspended"))
+    {
+        <br />
+        <div class="alert alert-danger">
+            <strong>Your account is suspended</strong>
+        </div>
+        <br />
+    }
+
+    @if (User.IsInRole("Staff"))
+    {
+        <h2> @Html.ActionLink(linkText: "New Post", actionName: "Create", controllerName: "Post",
+                           routeValues: null, htmlAttributes: null)</h2><hr />
+    }
+
+    @foreach (var post in Model)
+    {
+        if (post.User.UserName.Equals(User.Identity.Name) || User.IsInRole("Admin"))
+        {
+            <div class="blog-block">
+                <div>
+                    @Html.DisplayFor(modelItem => post.Title) | @Html.DisplayFor(modelItem => post.Category) <br />
+
+                    @if (post.IsApproved)
+                    {
+                        <small>Post is approved</small>
+                        if (User.IsInRole("Admin"))
+                        { @Html.ActionLink(linkText: "Disapprove Post", actionName: "DisapprovePost", controllerName: "Post",
+                   routeValues: new { id = post.PostID }, htmlAttributes: null) }
+                }
+                else
+                {
+                    <small>Post is not approved</small>
+                    if (User.IsInRole("Admin"))
+                    { @Html.ActionLink(linkText: "Approve Post", actionName: "ApprovePost", controllerName: "Post",
+               routeValues: new { id = post.PostID }, htmlAttributes: null)}
+            }
+                    <br />
+
+                    @Html.DisplayFor(modelItem => post.Content)<br />
+
+                    @Html.DisplayFor(modelItem => post.DatePosted) |
+
+                    @Html.ActionLink(linkText: "Edit", actionName: "Edit", controllerName: "Post",
+                       routeValues: new { id = post.PostID }, htmlAttributes: null) |
+
+                    @Html.ActionLink(linkText: "Delete", actionName: "Delete", controllerName: "Post",
+                       routeValues: new { id = post.PostID }, htmlAttributes: null)
+                </div>
+                <br />
+                <p>
+                    @{ Html.RenderAction("ListComments", "Comment", new { id = post.PostID }); }
+                </p>
+            </div>
+        }
+        else
+        {
+            if (post.IsApproved)
+            {
+                <div class="blog-block">
+                    <div>
+                        <h3>@Html.DisplayFor(modelItem => post.Title) | @Html.DisplayFor(modelItem => post.Category)</h3>
+
+                        <p>@Html.DisplayFor(modelItem => post.Content)</p>
+
+                        <small>@Html.DisplayFor(modelItem => post.DatePosted)</small>
+                    </div>
+                    <br />
+                    @if (User.IsInRole("Member"))
+                    {
+                        <p>
+                           @Html.ActionLink(linkText: "New Comment", actionName: "NewComment", controllerName: "Comment",
+                           routeValues: new { postID = post.PostID }, htmlAttributes: null)
+                        </p>
+                    }
+
+                    <p>
+                        @{ Html.RenderAction("ListComments", "Comment", new { id = post.PostID }); }
+                    </p>
+                </div>
+            }
+        }
+
+    }
+</div>

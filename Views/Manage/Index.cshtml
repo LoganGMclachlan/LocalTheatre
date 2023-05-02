@@ -1,0 +1,41 @@
+﻿@model Local_Theatre.Models.IndexViewModel
+@{
+    ViewBag.Title = "Account";
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>@TempData["AlertMessage"]</strong>
+    </div>
+    <br />
+}
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div class="red-block">
+    <h3>Change your account settings</h3>
+    <dl class="dl-horizontal">
+
+        <dt>Your Details:</dt>
+        <dd>
+            [
+            @Html.ActionLink("Update Details", "Update", "Manage")
+            ]
+        </dd>
+
+        <dt>Password:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Change your password", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Create", "SetPassword")
+            }
+            ]
+        </dd>
+    </dl>
+</div>

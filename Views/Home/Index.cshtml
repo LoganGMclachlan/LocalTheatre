@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>@TempData["AlertMessage"]</strong>
+    </div>
+    <br />
+}
+
+<div class="home-image">
+    <img src="/images/Local_Theatre_Company_Logo.jpg" alt="Local Theatre Logo" />
+</div>
+
+<div class="home-main">
+
+    <div class="home-block">
+        <div>
+            <ul class="category-list">
+                <li class="category-title"><b>Categories</b></li>
+                <li class="category-item">
+                    @Html.ActionLink(linkText: "Announcments", actionName: "FindInCatergory", controllerName: "Post",
+                   routeValues: new { category = "Announcment" }, htmlAttributes: new { @class = "link-color" })
+                </li>
+                <li class="category-item">
+                    @Html.ActionLink(linkText: "News", actionName: "FindInCatergory", controllerName: "Post",
+                           routeValues: new { category = "News" }, htmlAttributes: new { @class = "link-color" })
+                </li>
+                <li class="category-item">
+                    @Html.ActionLink(linkText: "Updates", actionName: "FindInCatergory", controllerName: "Post",
+                           routeValues: new { category = "Update" }, htmlAttributes: new { @class = "link-color" })
+                </li>
+                <li class="category-item">
+                    @Html.ActionLink(linkText: "Reviews", actionName: "FindInCatergory", controllerName: "Post",
+                           routeValues: new { category = "Review" }, htmlAttributes: new { @class = "link-color" })
+                </li>
+            </ul>
+        </div>
+
+        <h2>Welcome to the local theatre website</h2>
+        <p style="font-size:17px;">
+            This is a MVC application that allows you to register and login. Staff can create blog post for others can view. Members can post comments on blog posts.
+            Admins can modify user roles and suspend users. Suspended users cannot post blogs or comments. The admin can also choose to hide and or show posts.
+        </p>
+    </div>
+</div>

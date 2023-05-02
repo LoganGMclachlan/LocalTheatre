@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Local_Theatre.Models.Comment>
+
+
+<div>
+
+    @foreach (var comment in Model)
+    {
+
+        if (comment.User.UserName.Equals(User.Identity.Name) || User.IsInRole("Admin"))
+        {
+            <div class="comment-box">
+                @Html.DisplayFor(modelItem => comment.User.UserName) |
+
+                @if (comment.IsApproved)
+                {
+                    <small>Comment is approved</small>
+                    if (User.IsInRole("Admin")) { @Html.ActionLink(linkText: "Disapprove Comment", actionName: "DisapproveComment", controllerName: "Comment",
+                                                     routeValues: new { id = comment.CommentID }, htmlAttributes: null) }
+                }
+                else
+                {
+                    <small>Comment is not approved</small>
+                    if (User.IsInRole("Admin")) { @Html.ActionLink(linkText:"Approve Comment", actionName:"ApproveComment", controllerName:"Comment",
+                                                     routeValues:new { id = comment.CommentID }, htmlAttributes:null) }
+                }
+                <br />
+
+                @Html.DisplayFor(modelItem => comment.Content)
+                <br />
+                @Html.DisplayFor(modelItem => comment.DatePosted)
+
+                @Html.ActionLink(linkText: "Edit", actionName: "Edit", controllerName: "Comment",
+                       routeValues: new { id = comment.CommentID, postID = comment.PostID }, htmlAttributes: null) |
+
+                @Html.ActionLink(linkText: "Delete", actionName: "Delete", controllerName: "Comment",
+                    routeValues: new { id = comment.CommentID }, htmlAttributes: null)
+            </div>
+        }
+        else
+        {
+            if (comment.IsApproved)
+            {
+                <div class="comment-box">
+                    <h4>@Html.DisplayFor(modelItem => comment.User.UserName)</h4>
+
+                    <p>@Html.DisplayFor(modelItem => comment.Content)</p>
+                    
+                    <small>@Html.DisplayFor(modelItem => comment.DatePosted)</small>
+                </div>
+            }
+        }
+
+    }
+
+</div>
